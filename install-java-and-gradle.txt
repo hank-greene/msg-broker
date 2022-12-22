@@ -1,0 +1,70 @@
+
+
+sudo apt install openjdk-17-jdk openjdk-17-jre
+
+
+u2@u2:~/dev/git-mb/msg-broker$ sudo update-alternatives --config java
+There are 2 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-17-openjdk-arm64/bin/java      1711      auto mode
+  1            /usr/lib/jvm/java-17-openjdk-arm64/bin/java      1711      manual mode
+  2            /usr/lib/jvm/java-8-openjdk-arm64/jre/bin/java   1081      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number:
+
+How to Install Gradle on Ubuntu 22.04
+https://linuxhint.com/installing_gradle_ubuntu/
+
+
+wget -c https://services.gradle.org/distributions/gradle-7.4.2-bin.zip -P /tmp
+
+u2@u2:~/dev/git-mb/msg-broker$ ls -l /tmp
+total 113200
+-rw------- 1 u2   u2           0 Dec 22 04:40 config-err-HUABqC
+-rw-rw-r-- 1 u2   u2   115852617 Mar 31  2022 gradle-7.4.2-bin.zip
+
+
+sudo unzip -d /opt/gradle /tmp/gradle-7.4.2-bin.zip
+
+u2@u2:~/dev/git-mb/msg-broker$ ls -l /opt/gradle
+total 4
+drwxr-xr-x 5 root root 4096 Feb  1  1980 gradle-7.4.2
+
+
+
+sudo vi /etc/profile.d/gradle.sh
+
+u2@u2:~/dev/git-mb/msg-broker$ cat /etc/profile.d/gradle.sh
+export GRADLE_HOME=/opt/gradle/gradle-7.4.2
+export PATH=${GRADLE_HOME}/bin:${PATH}
+
+sudo chmod +x /etc/profile.d/gradle.sh
+
+u2@u2:~/dev/git-mb/msg-broker$ gradle --version
+
+Welcome to Gradle 7.4.2!
+
+Here are the highlights of this release:
+ - Aggregated test and JaCoCo reports
+ - Marking additional test source directories as tests in IntelliJ
+ - Support for Adoptium JDKs in Java toolchains
+
+For more details see https://docs.gradle.org/7.4.2/release-notes.html
+
+
+------------------------------------------------------------
+Gradle 7.4.2
+------------------------------------------------------------
+
+Build time:   2022-03-31 15:25:29 UTC
+Revision:     540473b8118064efcc264694cbcaa4b677f61041
+
+Kotlin:       1.5.31
+Groovy:       3.0.9
+Ant:          Apache Ant(TM) version 1.10.11 compiled on July 10 2021
+JVM:          17.0.5 (Private Build 17.0.5+8-Ubuntu-2ubuntu120.04)
+OS:           Linux 5.4.0-135-generic aarch64
+
+
