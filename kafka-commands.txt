@@ -17,6 +17,16 @@ __consumer_offsets
 kafka@rsk01:~$ kafka-topics.sh --create --topic kafkaDev --bootstrap-server localhost:9092
 Created topic kafkaDev.
 
+##### create topic with message retention time
+kafka@rsk01:~$ kafka-topics.sh --create --topic kafkaDev --config retention.ms=120000 --bootstrap-server localhost:9092
+Created topic kafkaDev.
+
+
+kafka@rsk01:~$ kafka-topics.sh --describe --bootstrap-server localhost:9092
+Topic: kafkaDev	TopicId: AKxPzJQMSrmaEqDauuZiWw	PartitionCount: 1	ReplicationFactor: 1	Configs: retention.ms=120000
+	Topic: kafkaDev	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+kafka@rsk01:~$
+
 
 kafka@rsk01:~$ kafka-topics.sh --list --bootstrap-server localhost:9092
 TutorialTopic
@@ -41,11 +51,16 @@ kafka@rsk01:~$ kafka-configs.sh --alter --bootstrap-server localhost:9092 --enti
 Completed updating config for topic kafkaDev.
 
 
-------------------------------------------------------
+-------Producer-----------------------------------------------
 
 kafka@rsk01:~$ echo "Hello World from Sammy at DigitalOcean!" | ~/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TutorialTopic > /dev/null
 
 kafka@rsk01:~$ ./kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 TutorialTopic
 __consumer_offsets
+
+-------Consumer-----------------------------------------------
+
+> kafka-console-consumer.sh --topic kafkaDev --bootstrap-server localhost:9092
+
 
