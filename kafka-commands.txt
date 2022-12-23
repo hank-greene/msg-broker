@@ -1,0 +1,51 @@
+
+Reference Links
+https://www.oak-tree.tech/blog/kafka-admin-remove-messages
+
+
+
+export KAFKA_HOME=/home/kafka/kafka
+export PATH=$PATH:$KAFKA_HOME/bin
+echo $PATH
+
+
+kafka@rsk01:~$ kafka-topics.sh --list --bootstrap-server localhost:9092
+TutorialTopic
+__consumer_offsets
+
+
+kafka@rsk01:~$ kafka-topics.sh --create --topic kafkaDev --bootstrap-server localhost:9092
+Created topic kafkaDev.
+
+
+kafka@rsk01:~$ kafka-topics.sh --list --bootstrap-server localhost:9092
+TutorialTopic
+__consumer_offsets
+kafkaDev
+
+
+kafka@rsk01:~$ kafka-topics.sh --describe --bootstrap-server localhost:9092
+Topic: TutorialTopic	TopicId: EQk1g5UDTGmmQ0hxi68Jug	PartitionCount: 1	ReplicationFactor: 1	Configs: 
+	Topic: TutorialTopic	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+Topic: __consumer_offsets	TopicId: PYdk3PIFQxyVyT3prgFtnw	PartitionCount: 50	ReplicationFactor: 1	Configs: compression.type=producer,cleanup.policy=compact,segment.bytes=104857600
+	Topic: __consumer_offsets	Partition: 48	Leader: 0	Replicas: 0	Isr: 0
+    .
+    .
+    .
+	Topic: __consumer_offsets	Partition: 49	Leader: 0	Replicas: 0	Isr: 0
+Topic: kafkaDev	TopicId: zPOI93QYR0iV02T8iwm33A	PartitionCount: 1	ReplicationFactor: 1	Configs: 
+	Topic: kafkaDev	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+kafka@rsk01:~$ 
+
+kafka@rsk01:~$ kafka-configs.sh --alter --bootstrap-server localhost:9092 --entity-type topics --entity-name kafkaDev --add-config retention.ms=60000
+Completed updating config for topic kafkaDev.
+
+
+------------------------------------------------------
+
+kafka@rsk01:~$ echo "Hello World from Sammy at DigitalOcean!" | ~/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TutorialTopic > /dev/null
+
+kafka@rsk01:~$ ./kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+TutorialTopic
+__consumer_offsets
+
