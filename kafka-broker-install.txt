@@ -57,16 +57,6 @@ rsk@rsk01:~$ su -l kafka
 Password: 
 kafka@rsk01:~$
 
-
-kafka@rsk01:~/Downloads$ curl "https://downloads.apache.org/kafka/2.6.2/kafka_2.13-2.6.2.tgz" -o ~/Downloads/kafka.tgz
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100   196  100   196    0     0    442      0 --:--:-- --:--:-- --:--:--   441
-kafka@rsk01:~/Downloads$ ls -l
-total 4
--rw-rw-r-- 1 kafka kafka 196 Dec 22 19:44 kafka.tgz
-kafka@rsk01:~/Downloads$
-
 kafka@rsk01:~/Downloads$ mkdir ~/kafka && cd ~/kafka
 kafka@rsk01:~/kafka$
 
@@ -76,24 +66,29 @@ kafka@rsk01:~/Downloads$ curl "https://downloads.apache.org/kafka/3.3.1/kafka_2.
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  100M  100  100M    0     0  2447k      0  0:00:41  0:00:41 --:--:-- 1767k
+
 kafka@rsk01:~/Downloads$ curl "https://downloads.apache.org/kafka/3.3.1/kafka_2.12-3.3.1.tgz.md5" -o ~/Downloads/kafka.tgz.md5
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100    71  100    71    0     0    184      0 --:--:-- --:--:-- --:--:--   184
+
+
 kafka@rsk01:~/Downloads$ cat kafka.tgz.md5 
 kafka_2.12-3.3.1.tgz: 6D 1D B3 71 79 69 EA D1  48 3E 38 C4 30 CF DF F2
 kafka@rsk01:~/Downloads$ ls -l
 total 102636
 -rw-rw-r-- 1 kafka kafka 105092106 Dec 22 19:50 kafka.tgz
 -rw-rw-r-- 1 kafka kafka        71 Dec 22 19:51 kafka.tgz.md5
+
+
 kafka@rsk01:~/Downloads$ md5sum kafka.tgz
 6d1db3717969ead1483e38c430cfdff2  kafka.tgz
 kafka@rsk01:~/Downloads$
 
+
 kafka@rsk01:~/kafka$ tar -xvzf ~/Downloads/kafka.tgz --strip 1
 kafka_2.12-3.3.1/LICENSE
 kafka_2.12-3.3.1/NOTICE
-.
 
 
 nano ~/kafka/config/server.properties
@@ -153,7 +148,6 @@ Restart=on-abnormal
 WantedBy=multi-user.target
 
 
-
 kafka@rsk01:/home/rsk$ sudo systemctl start kafka
 kafka@rsk01:/home/rsk$ sudo systemctl startus kafka
 Unknown operation startus.
@@ -180,9 +174,11 @@ Executing: /lib/systemd/systemd-sysv-install enable zookeeper
 Created symlink /etc/systemd/system/multi-user.target.wants/zookeeper.service → /etc/systemd/system/zookeeper.service.
 
 
+
 kafka@rsk01:/home/rsk$ sudo systemctl enable kafka
 Created symlink /etc/systemd/system/multi-user.target.wants/kafka.service → /etc/systemd/system/kafka.service.
 kafka@rsk01:/home/rsk$ 
+
 
 
 kafka@rsk01:/home/rsk$ ~/kafka/bin/kafka-topics.sh --create --topic TutorialTopic --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1

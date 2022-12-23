@@ -12,7 +12,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class App {
     public String getGreeting() {
-        return "Hello World!";
+        return "Producer, topic kafkaDev";
     }
 
     public static void main(String[] args) {
