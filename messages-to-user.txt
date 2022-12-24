@@ -32,3 +32,14 @@ Verizon: number@vtext.com (SMS), number@vzwpix.com (MMS)
 Virgin Mobile: number@vmobl.com (SMS), number@vmpix.com (MMS)
 Visible: number@vtext.com (SMS), number@vzwpix.com (MMS)
 Xfinity Mobile: number@vtext.com (SMS), number@mypixmessages.com (MMS)
+
+
+https://www.digitaltrends.com/mobile/how-to-send-a-text-from-your-email-account/
+https://wallethacks.com/how-to-send-sms-mms-text-messages-by-email-for-free/
+https://www.techwyse.com/blog/general-category/simple-tricks-to-send-free-text-messages-from-your-computer/#
+https://www.dialmycalls.com/blog/send-text-messages-email-address
+
+https://www.techwalla.com/articles/how-to-send-a-free-text-message-without-knowing-the-carrier
+
+
+
