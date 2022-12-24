@@ -35,6 +35,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
+    // https://mvnrepository.com/artifact/com.twilio.sdk/twilio
+    implementation group: 'com.twilio.sdk', name: 'twilio', version: '9.2.0'
+
 }
 
 application {

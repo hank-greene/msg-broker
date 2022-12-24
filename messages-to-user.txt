@@ -1,0 +1,34 @@
+https://www.tech-recipes.com/internet/sms_email_us_cellular_suncom_powertel_att_alltel/
+
+US Cellular: @email.uscc.net
+SunCom: @tms.suncom.com
+Powertel: @ptel.net
+AT&T: @txt.att.net
+AT&T MMS: @MMS.att.net
+Alltel: @message.alltel.com
+Metro PCS: @MyMetroPcs.com
+
+
+https://20somethingfinance.com/how-to-send-text-messages-sms-via-email-for-free/
+AT&T: number@txt.att.net (SMS), number@mms.att.net (MMS)
+Boost Mobile: number@sms.myboostmobile.com (SMS), number@myboostmobile.com (MMS)
+C-Spire: number@cspire1.com
+Consumer Cellular: number@mailmymobile.net
+Cricket: number@sms.cricketwireless.net (SMS), number@mms.cricketwireless.net (MMS)
+Google Fi (Project Fi): number@msg.fi.google.com (SMS & MMS)
+Metro PCS: number@mymetropcs.com (SMS & MMS)
+Mint Mobile: number@mailmymobile.net (SMS)
+Page Plus: number@vtext.com (SMS), number@mypixmessages.com (MMS)
+Red Pocket: Red Pocket uses AT&T or T-Mobile (for GSM SIMs) & Verizon for CDMA. See info. for those carriers.
+Republic Wireless: number@text.republicwireless.com (SMS)
+Simple Mobile: number@smtext.com (SMS)
+Sprint: number@messaging.sprintpcs.com (SMS), number@pm.sprint.com (MMS)
+T-Mobile: number@tmomail.net (SMS & MMS)
+Ting: number@message.ting.com (SMS for CDMA), number@tmomail.net (SMS for GSM)
+Tracfone: number@mmst5.tracfone.com (MMS)
+U.S. Cellular: number@email.uscc.net (SMS), number@mms.uscc.net (MMS)
+U.S. Mobile: number@vtext.com (SMS), number@mypixmessages.com (MMS)
+Verizon: number@vtext.com (SMS), number@vzwpix.com (MMS)
+Virgin Mobile: number@vmobl.com (SMS), number@vmpix.com (MMS)
+Visible: number@vtext.com (SMS), number@vzwpix.com (MMS)
+Xfinity Mobile: number@vtext.com (SMS), number@mypixmessages.com (MMS)
