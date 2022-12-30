@@ -47,6 +47,7 @@ public class App {
         App app = new App();
         app.sendMail();
 
+        /******
         //Kafka consumer configuration settings
         //String topicName = args[0].toString();
         String topicName = "kafkaDev";
@@ -75,15 +76,16 @@ public class App {
             System.out.printf("offset = %d, key = %s, value = %s\n",
             record.offset(), record.key(), record.value());
         }
+         */
     }
 
     public void sendMail() {
         // Recipient's email ID needs to be mentioned.
-        String to = "4434332599@txt.att.net";
+        String to = "4434332699@txt.att.net";
 
 		final String fromEmail = "cbd321@gmail.com"; //requires valid gmail id
 		final String password2 = "....."; // correct password for gmail id
-		final String toEmail = "4434332599@txt.att.net"; // can be any email id 
+		final String toEmail = "4434332699@txt.att.net"; // can be any email id 
 		
 		System.out.println("TLSEmail Start");
 		Properties props2 = new Properties();
@@ -102,26 +104,28 @@ public class App {
 		Session session2 = Session.getInstance(props2, auth2);
 		
 		//EmailUtil.sendEmail(session2, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
-		this.sendEmail(session2, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
+		//this.sendEmail(session2, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
 		
         // Sender's email ID needs to be mentioned
         //String from = "fromemail@gmail.com";
         //final String username = "manishaspatil";//change accordingly
         //final String password = "******";//change accordingly
-        String from = "admin@tgndomains.com";
-        final String username = "admin";//change accordingly
-        final String password = "........";//change accordingly
+        String from = "justin.beeber@tgndomains.com";
+        final String username = "justin.beeber@tgndomains.com";//change accordingly
+        final String password = "......";//change accordingly
 
         // Assuming you are sending email through relay.jangosmtp.net
         //String host = "relay.jangosmtp.net";
-        ///String host = "relay.tgndomains.com";
+        //String host = "relay.tgndomains.com";
         String host = "tgndomains.com";
-
+System.out.println("-----------> "+host+"   to "+to);
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", "25");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        //props.put("mail.smtp.ssl.trust", "smtp.tgndomains.com");
         //props.put("mail.smtp.port", "143");
 
         // Get the Session object.
