@@ -22,6 +22,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
 import javax.mail.Authenticator;
 
 import java.io.UnsupportedEncodingException;
@@ -35,88 +36,69 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
-
 public class App {
+
     public String getGreeting() {
-        return "Consumer, topic kafkaDev";
+        return "BBMNT Consumer";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-
         App app = new App();
-        app.sendMail();
+        System.out.println(app.getGreeting());
 
-        /******
         //Kafka consumer configuration settings
         //String topicName = args[0].toString();
         String topicName = "kafkaDev";
         Properties props = new Properties();
+        
         //props.put("bootstrap.servers", "localhost:9092");
-        props.put("bootstrap.servers", "10.10.89.95:9092");
+        props.put("bootstrap.servers", "10.10.89.94:9092");
         props.put("group.id", "test");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
         props.put("session.timeout.ms", "30000");
-        props.put("key.deserializer",
-            "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer",
-            "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer
-            <String, String>(props);
-            //Kafka Consumer subscribes list of topics here.
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+        
+        //Kafka Consumer subscribes list of topics here.
         consumer.subscribe(Arrays.asList(topicName));
+        
         //print the topic name
         System.out.println("Subscribed to topic " + topicName);
         int i = 0;
+
+        //app.sendMail();
+
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(60000));
-            for (ConsumerRecord<String, String> record : records)
-            // print the offset,key and value for the consumer records.
-            System.out.printf("offset = %d, key = %s, value = %s\n",
-            record.offset(), record.key(), record.value());
+            /****
+            if(records.isEmpty()) {
+                System.out.println("records.isEmpty()");
+            } else {
+                for (ConsumerRecord<String, String> record : records)
+                    System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+            }
+             */
+            for (ConsumerRecord<String, String> record : records) {
+                // print the offset,key and value for the consumer records.
+                System.out.println("printf");
+                System.out.printf( "offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value() );
+                //app.sendMail();
+            }
         }
-         */
     }
 
     public void sendMail() {
         // Recipient's email ID needs to be mentioned.
         String to = "4434332699@txt.att.net";
-
-		final String fromEmail = "cbd321@gmail.com"; //requires valid gmail id
-		final String password2 = "....."; // correct password for gmail id
-		final String toEmail = "4434332699@txt.att.net"; // can be any email id 
+        //String to = "5719265477@vtext.com";
 		
-		System.out.println("TLSEmail Start");
-		Properties props2 = new Properties();
-		props2.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
-		props2.put("mail.smtp.port", "587"); //TLS Port
-		props2.put("mail.smtp.auth", "true"); //enable authentication
-		props2.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
-		
-                //create Authenticator object to pass in Session.getInstance argument
-		Authenticator auth2 = new Authenticator() {
-			//override the getPasswordAuthentication method
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(fromEmail, password2);
-			}
-		};
-		Session session2 = Session.getInstance(props2, auth2);
-		
-		//EmailUtil.sendEmail(session2, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
-		//this.sendEmail(session2, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
-		
-        // Sender's email ID needs to be mentioned
-        //String from = "fromemail@gmail.com";
-        //final String username = "manishaspatil";//change accordingly
-        //final String password = "******";//change accordingly
         String from = "justin.beeber@tgndomains.com";
         final String username = "justin.beeber@tgndomains.com";//change accordingly
-        final String password = "......";//change accordingly
+        final String password = "just1n.b33b3r";//change accordingly
 
         // Assuming you are sending email through relay.jangosmtp.net
-        //String host = "relay.jangosmtp.net";
-        //String host = "relay.tgndomains.com";
         String host = "tgndomains.com";
 System.out.println("-----------> "+host+"   to "+to);
         Properties props = new Properties();
@@ -151,8 +133,8 @@ System.out.println("-----------> "+host+"   to "+to);
             message.setSubject("Testing Subject");
          
             // Now set the actual message
-            message.setText("Hello, this is sample for to check send " +
-             "email using JavaMailAPI ");
+            message.setText("Hi Rosario, this is Justin Beeber. " +
+             "This is a test of my new delivery system. Thank you for participating.");
      
             // Send message
             Transport.send(message);
@@ -163,34 +145,4 @@ System.out.println("-----------> "+host+"   to "+to);
             throw new RuntimeException(e);
         }
     }
-
-	public static void sendEmail(Session session, String toEmail, String subject, String body){
-		try
-	    {
-	      MimeMessage msg = new MimeMessage(session);
-	      //set message headers
-	      msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-	      msg.addHeader("format", "flowed");
-	      msg.addHeader("Content-Transfer-Encoding", "8bit");
-
-	      msg.setFrom(new InternetAddress("no_reply@example.com", "NoReply-JD"));
-
-	      msg.setReplyTo(InternetAddress.parse("no_reply@example.com", false));
-
-	      msg.setSubject(subject, "UTF-8");
-
-	      msg.setText(body, "UTF-8");
-
-	      msg.setSentDate(new Date());
-
-	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-	      System.out.println("Message is ready");
-    	  Transport.send(msg);  
-
-	      System.out.println("EMail Sent Successfully!!");
-	    }
-	    catch (Exception e) {
-	      e.printStackTrace();
-	    }
-	}
 }

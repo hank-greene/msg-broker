@@ -35,17 +35,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-    // TODO: text messaging service ... in the meantime, email
-    // https://mvnrepository.com/artifact/com.twilio.sdk/twilio
-    //implementation group: 'com.twilio.sdk', name: 'twilio', version: '9.2.0'
-
-    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
-    //implementation group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
-
     // https://mvnrepository.com/artifact/javax.mail/mail
     implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
-
-
+    
 }
 
 application {

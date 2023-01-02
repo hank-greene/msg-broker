@@ -1,5 +1,8 @@
 https://hevodata.com/blog/how-to-install-kafka-on-ubuntu/
 
+https://www.mariuszrafalo.pl/sgh/projekty/kafka.html
+
+
 rsk@rsk01:~$ cat /etc/os-release
 NAME="Ubuntu"
 VERSION="20.04.3 LTS (Focal Fossa)"
@@ -195,5 +198,19 @@ kafka@rsk01:/home/rsk$ ~/kafka/bin/kafka-console-consumer.sh --bootstrap-server 
 Hello, World
 Hello World from Sammy at DigitalOcean!
 
+
+https://stackoverflow.com/questions/32533837/kafka-binding-to-ipv6-port-even-though-ipv4-address-specified-in-config:
+
+Add this is kafka/bin/Kafka-run-class.sh
+KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"
+
+modify kafak/config/server.properties add the following
+#listeners=PLAINTEXT://:9092
+listeners=PLAINTEXT://0.0.0.0:9092
+
+# Listener name, hostname and port the broker will advertise to clients.
+# If not set, it uses the value for "listeners".
+#advertised.listeners=PLAINTEXT://your.host.name:9092
+advertised.listeners=PLAINTEXT://10.10.89.94:9092
 
 
