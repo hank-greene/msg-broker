@@ -21,8 +21,6 @@ public class App {
         String topicName = "kafkaDev";
 
         Properties props = new Properties();
-
-        //props.put("bootstrap.servers", "localhost:9092");
         props.put("bootstrap.servers", "10.10.89.94:9092");
         props.put("acks", "all");
         props.put("retries", 0);
@@ -33,12 +31,7 @@ public class App {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         Producer<String, String> producer = new KafkaProducer<String, String>(props);
-
-        for(int i = 0; i < 10; i++) {
-            System.out.println(i);
-            producer.send( new ProducerRecord<String, String>(topicName, Integer.toString(i), Integer.toString(i)) );
-            //producer.send( new ProducerRecord<String, String>(topicName, "mobile", "4434332699") );
-        }
+        producer.send( new ProducerRecord<String, String>(topicName, "mobile", "4434332699") );
 
         System.out.println("Message sent successfully");
         producer.close();
