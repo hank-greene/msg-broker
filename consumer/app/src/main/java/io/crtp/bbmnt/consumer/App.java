@@ -22,7 +22,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-
 import javax.mail.Authenticator;
 
 import java.io.UnsupportedEncodingException;
@@ -36,7 +35,16 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.File;
+import java.io.FileWriter;
+
 public class App {
+
+    private static String PROPERTIES_FILE_NAME = "mbConsumer.properties";
+    private static Properties mbProps = null;
 
     public String getGreeting() {
         return "BBMNT Consumer";
@@ -47,45 +55,116 @@ public class App {
         System.out.println(app.getGreeting());
         System.out.println("!!!! >>>>  REMOVE PW before checkin <<<<<<<<<<<<<<!!!!!!!!!!!!");
 
-        String topicName = "kafkaDev";
-        Properties props = new Properties();
-        
-        //props.put("bootstrap.servers", "localhost:9092");
-        props.put("bootstrap.servers", "10.10.89.94:9092");
-        props.put("group.id", "test");
-        props.put("enable.auto.commit", "true");
-        props.put("auto.commit.interval.ms", "1000");
-        props.put("session.timeout.ms", "30000");
-        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
-        
-        //Kafka Consumer subscribes list of topics here.
-        consumer.subscribe(Arrays.asList(topicName));
-        
-        //print the topic name
-        System.out.println("Subscribed to topic " + topicName);
-        int i = 0;
+        Properties mbProps = null;
 
-        while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(60000));
-            for (ConsumerRecord<String, String> record : records) {
-                // print the offset,key and value for the consumer records.
-                System.out.println("printf");
-                System.out.printf( "offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value() );
+        try (InputStream input = new FileInputStream("./"+PROPERTIES_FILE_NAME)) {
 
-                if (record.key().contains("mobile")) {
+            mbProps = new Properties();
+            mbProps.load(input);
+            displayProperties(mbProps);
 
-                    app.sendMobile( record.value() );
+            String topicName = "kafkaDev";
 
-                } else if (record.key().contains("email")) {
+            //Properties props = new Properties();
+            //props.put("bootstrap.servers", "localhost:9092");
+            //props.put("bootstrap.servers", "10.10.89.94:9092");
+            //props.put("group.id", "test");
+            //props.put("enable.auto.commit", "true");
+            //props.put("auto.commit.interval.ms", "1000");
+            //props.put("session.timeout.ms", "30000");
+            //props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+            //props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+            //KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
-                    app.sendMail( record.value() );
+            String channel_topic = mbProps.getProperty("kafka.topic");
+            System.out.println( "kafka.topic / channel_topic " + channel_topic );
 
+            KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(mbProps);
+            
+            //Kafka Consumer subscribes list of topics here.
+            consumer.subscribe(Arrays.asList(topicName));
+            
+            //print the topic name
+            System.out.println("Subscribed to topic " + topicName);
+            int i = 0;
+
+            //TODO: REMOVE THIS TEST puuposes only !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            app.sendMobile( "test message" );
+
+            while (true) {
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(60000));
+                for (ConsumerRecord<String, String> record : records) {
+                    // print the offset,key and value for the consumer records.
+                    System.out.println("printf");
+                    System.out.printf( "offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value() );
+
+                    if (record.key().contains("mobile")) {
+
+                        app.sendMobile( record.value() );
+
+                    } else if (record.key().contains("email")) {
+
+                        app.sendMail( record.value() );
+
+                    }
                 }
             }
+
+        } catch (IOException iox) {
+            if (new File("./"+PROPERTIES_FILE_NAME).exists()){
+
+            } else {
+                createPropertiesFile();
+                System.out.println("The mb.properties file needs to be filled out.");
+            }
+            iox.printStackTrace();
+        }
+
+
+    }
+
+    /****
+     * 
+     */
+    private static void createPropertiesFile() {
+        try {
+            FileWriter fw = new FileWriter("./"+PROPERTIES_FILE_NAME);
+            //props.put("bootstrap.servers", "localhost:9092");
+            fw.write("kafka.topic="+System.getProperty("line.separator"));
+            fw.write("bootstrap.servers=< IP Address >:9092"+System.getProperty("line.separator"));
+            fw.write("group.id=test"+System.getProperty("line.separator"));
+            fw.write("enable.auto.commit=true"+System.getProperty("line.separator"));
+            fw.write("auto.commit.interval.ms=1000"+System.getProperty("line.separator"));
+            fw.write("session.timeout.ms=30000"+System.getProperty("line.separator"));
+            fw.write("key.deserializer=org.apache.kafka.common.serialization.StringDeserializer"+System.getProperty("line.separator"));
+            fw.write("value.deserializer=org.apache.kafka.common.serialization.StringDeserializer"+System.getProperty("line.separator"));
+            fw.write("email.host="+System.getProperty("line.separator"));
+            fw.write("email.sender="+System.getProperty("line.separator"));
+            fw.write("email.password="+System.getProperty("line.separator"));
+            fw.close();
+        } catch (IOException iox){
+            iox.printStackTrace();
         }
     }
+
+
+    private static void displayProperties( Properties mbProps ) {
+        try {
+            System.out.println("kafka.topi "+ mbProps.getProperty("kafka.topic"));
+            System.out.println("bootstrap.servers " + mbProps.getProperty("bootstrap.servers"));
+            System.out.println("group.id " + mbProps.getProperty("group.id"));
+            System.out.println("enable.auto.commit " + mbProps.getProperty("enable.auto.commit"));
+            System.out.println("auto.commit.interval.ms " + mbProps.getProperty("auto.commit.interval.ms"));
+            System.out.println("session.timeout.ms " + mbProps.getProperty("session.timeout.ms"));
+            System.out.println("key.deserializer " + mbProps.getProperty("key.deserializer"));
+            System.out.println("value.deserializer " + mbProps.getProperty("value.deserializer"));
+            System.out.println();
+        } catch ( Exception ex ) {
+            System.out.println( ex.toString() );
+            ex.printStackTrace();
+        }
+    }
+
 
     /**
      * 
@@ -104,6 +183,7 @@ public class App {
 
         String to = "4434332699";
         String from = "justin.beeber@tgndomains.com";
+        //String from = mbProps.getProperty("email.sender");
         Session session = null;
 
         System.out.println("mobileNumAndLink   "+mobileNumAndLink);
@@ -120,11 +200,14 @@ public class App {
         to = mobileNum + "@txt.att.net";            
         from = "justin.beeber@tgndomains.com";
 
-        final String username = "just..........ains.com";//change accordingly
-        final String password = ".......";//change accordingly
+        final String username = "justin.beeber@tgndomains.com";//change accordingly
+        final String password = "88NDy7TLChkl";//change accordingly
+        //final String username = mbProps.getProperty("email.sender");//change accordingly
+        //final String password = mbProps.getProperty("email.password");//change accordingly
 
         // Assuming you are sending email through relay.jangosmtp.net
-        String host = "tgndomains.com";
+        //String host = mbProps.getProperty("email.host");
+        String host = "173.166.130.90";
         System.out.println("-----------> "+host+"   to "+to);
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -157,9 +240,10 @@ public class App {
             message.setSubject("Testing Subject");
          
             // Now set the actual message
-            message.setText("Hi Rosario, this is Justin Beeber. " +
-             "This is a test of a new delivery system. Click here  "+
-             "https://"+appLink+"  to access magnetic echos.");
+            message.setText("Hi," +
+             "Click here  "+
+             "https://magneticechos.online/uid/abc123.xwic"+" to access magnetic echos, echos "+
+             " from the past, heard today.");
      
             // Send message
             Transport.send( message );

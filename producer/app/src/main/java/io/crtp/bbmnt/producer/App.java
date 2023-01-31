@@ -10,7 +10,17 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.File;
+import java.io.FileWriter;
+
+
 public class App {
+
+    private static String PROPERTIES_FILE_NAME = "mbProducer.properties";
+
     public String getGreeting() {
         return "Producer, topic kafkaDev";
     }
@@ -20,20 +30,81 @@ public class App {
 
         String topicName = "kafkaDev";
 
-        Properties props = new Properties();
-        props.put("bootstrap.servers", "10.10.89.94:9092");
-        props.put("acks", "all");
-        props.put("retries", 0);
-        props.put("batch.size", 16384);
-        props.put("linger.ms", 1);
-        props.put("buffer.memory", 33554432);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        Properties mbProps = null;
 
-        Producer<String, String> producer = new KafkaProducer<String, String>(props);
-        producer.send( new ProducerRecord<String, String>(topicName, "mobile", "4434332699") );
+        try (InputStream input = new FileInputStream("./"+PROPERTIES_FILE_NAME)) {
 
-        System.out.println("Message sent successfully");
-        producer.close();
+            mbProps = new Properties();
+            mbProps.load(input);
+            displayProperties(mbProps);
+
+            Properties props = new Properties();
+            props.put("bootstrap.servers", "10.10.93.12:9092");
+            //props.put("bootstrap.servers", "10.10.89.95:9092");
+            System.out.println(mbProps.getProperty("bootstrap.servers"));
+            //props.put("bootstrap.servers", mbProps.getProperty("bootstrap.servers"));
+            props.put("acks", "all");
+            props.put("retries", 0);
+            props.put("batch.size", 16384);
+            props.put("linger.ms", 1);
+            props.put("buffer.memory", 33554432);
+            props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+            //Producer<String, String> producer = new KafkaProducer<String, String>(props);
+            Producer<String, String> producer = new KafkaProducer<String, String>(props);
+            producer.send( new ProducerRecord<String, String>(topicName, "mobile", "4434332699") );
+
+            System.out.println("Message sent successfully");
+            producer.close();
+
+        } catch (IOException iox) {
+            if (new File("./"+PROPERTIES_FILE_NAME).exists()){
+
+            } else {
+                createPropertiesFile();
+                System.out.println("The mb.properties file needs to be filled out.");
+            }
+            iox.printStackTrace();
+        }
+    }
+
+    /****
+     * 
+     */
+    private static void createPropertiesFile() {
+        try {
+            FileWriter fw = new FileWriter("./"+PROPERTIES_FILE_NAME);
+            //props.put("bootstrap.servers", "localhost:9092");
+            fw.write("kafka.topic=< channel name, i.e. topic >"+System.getProperty("line.separator"));
+            fw.write("bootstrap.servers=< IP Address >:9092"+System.getProperty("line.separator"));
+            fw.write("group.id=test"+System.getProperty("line.separator"));
+            fw.write("enable.auto.commit=true"+System.getProperty("line.separator"));
+            fw.write("auto.commit.interval.ms=1000"+System.getProperty("line.separator"));
+            fw.write("session.timeout.ms=30000"+System.getProperty("line.separator"));
+            fw.write("key.deserializer=org.apache.kafka.common.serialization.StringDeserializer"+System.getProperty("line.separator"));
+            fw.write("value.deserializer=org.apache.kafka.common.serialization.StringDeserializer"+System.getProperty("line.separator"));
+            fw.close();
+        } catch (IOException iox){
+            iox.printStackTrace();
+        }
+    }
+
+
+    private static void displayProperties( Properties mbProps ) {
+        try {
+            System.out.println("kafka.topi "+ mbProps.getProperty("kafka.topic"));
+            System.out.println("bootstrap.servers " + mbProps.getProperty("bootstrap.servers"));
+            System.out.println("group.id " + mbProps.getProperty("group.id"));
+            System.out.println("enable.auto.commit " + mbProps.getProperty("enable.auto.commit"));
+            System.out.println("auto.commit.interval.ms " + mbProps.getProperty("auto.commit.interval.ms"));
+            System.out.println("session.timeout.ms " + mbProps.getProperty("session.timeout.ms"));
+            System.out.println("key.deserializer " + mbProps.getProperty("key.deserializer"));
+            System.out.println("value.deserializer " + mbProps.getProperty("value.deserializer"));
+            System.out.println();
+        } catch ( Exception ex ) {
+            System.out.println( ex.toString() );
+            ex.printStackTrace();
+        }
     }
 }
